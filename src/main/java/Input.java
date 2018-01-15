@@ -38,7 +38,7 @@ public class Input extends JFrame {
         for(int i = 0; i < MAX_N; i++){
             g.add(new ArrayList<>());
             for(int j = 0; j < MAX_N; j++){
-                g.get(i).add(0);
+                g.get(i).add(-1);
             }
         }
     }
@@ -62,6 +62,19 @@ public class Input extends JFrame {
             n = Integer.parseInt(str[0]);
             for(int i = 1; i < str.length; i++){
                 g.get((i-1) / n).set((i-1) % n, Integer.parseInt(str[i])); //g[(i-1)/n][(i-1)%n] = str[i]
+            }
+            for(int i = 0; i < g.size(); i++){
+                for(int j = 0; j < g.get(i).size(); j++){
+                    if((j >= n || i >= n) && g.get(i).get(j) != -1){
+                        System.exit(1);
+                    }
+                    if(i != j && g.get(i).get(j) == -1){
+                        System.exit(1);
+                    }
+                    if(i == j && g.get(i).get(j) != -1){
+                        System.exit(1);
+                    }
+                }
             }
         } catch (NumberFormatException e){
             System.out.println("Неправильный формат ввода");
