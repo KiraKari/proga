@@ -1,8 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Algorithm
-{
+public class Algorithm {
     public static int speed = 500;
 
     private ArrayList<ArrayList<Integer>> g = new ArrayList<> ();
@@ -38,46 +37,35 @@ public class Algorithm
         g = Input.getG();
     }
 
-    private void updateViz()
-    {
+    private void updateViz(){ //Рисует окошко с визуализацией
         visual = new Visualization();
         ArrayList<Point> points = getCoordinates();
         for(int i = 0; i < n; i++){
             visual.addVertex(i, (int)(points.get(i).x * 250) + 250, (int)(points.get(i).y * 250) + 250);
-            visual.turnOffVertex(i);
         }
 
         for(int i = 0; i < n; i++){
             for(int j = i; j < n; j++){
                 if(i == j) continue;
                 visual.addEdge(i, j);
-                visual.turnOffEdge(i, j);
             }
         }
     }
 
-    private void DFS(int v, int from, int steps, int weight)
-    {
-
-
-        if (visited.get(v))
-        {
-            return;
-        }
+    private void DFS(int v, int from, int steps, int weight){
+        if (visited.get(v)) return;
 
         turnOn(from, v);
         visual.changeSumOfWeights(weight, min_weight);
 
-        if(weight > min_weight)
-        {
+        if(weight > min_weight){
             turnOff(from, v);
             return;
         }
 
         visited.set(v, true);
         path.set(v, from);
-        if (steps == 0 && g.get(v).get(start)!= -1)
-        {
+        if (steps == 0 && g.get(v).get(start)!= -1){
             weight += g.get(v).get(start);
             if(weight < min_weight){
                 min_weight = weight;

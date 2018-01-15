@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class Input extends JFrame {
+public class Input extends JFrame{
     private JTextArea textArea;
     private JButton button;
     private static int n = 0;
@@ -14,11 +14,11 @@ public class Input extends JFrame {
 
     private boolean flag = false;
 
-    Input (){
+    public Input (){
         init();
         setLayout(new BorderLayout());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(300, 300);
+        setSize(400, 400);
         textArea = new JTextArea(18, 15);
         textArea.setText("УДАЛИТЕ ОТСЮДА\nВходные данные подаются в виде:\nn\nM\n\nгде n - количество городов\nа М - матрица смежности\n Например: \nУДАЛИТЕ ДОСЮДА\n3\n-1 1 1\n1 -1 1\n1 1 -1");
         button = new JButton("OK");
@@ -33,6 +33,7 @@ public class Input extends JFrame {
         setVisible(true);
     }
 
+    // заполняю массив g  -1
     void init(){
         g = new ArrayList<>();
         for(int i = 0; i < MAX_N; i++){
@@ -63,26 +64,31 @@ public class Input extends JFrame {
             for(int i = 1; i < str.length; i++){
                 g.get((i-1) / n).set((i-1) % n, Integer.parseInt(str[i])); //g[(i-1)/n][(i-1)%n] = str[i]
             }
-            for(int i = 0; i < g.size(); i++){
+
+            for(int i = 0; i < g.size(); i++){ //проверяет на корректность введенные данные
                 for(int j = 0; j < g.get(i).size(); j++){
                     if((j >= n || i >= n) && g.get(i).get(j) != -1){
-                        System.exit(1);
+                        exit();
                     }
-                    if(i != j && g.get(i).get(j) == -1){
-                        System.exit(1);
+                    if(i != j && g.get(i).get(j) == -1 && j < n && i < n){
+                        exit();
                     }
-                    if(i == j && g.get(i).get(j) != -1){
-                        System.exit(1);
+                    if(i == j && g.get(i).get(j) != -1 && j < n && i < n){
+                        exit();
                     }
                 }
             }
+            showAnswer(); //DEBUG
         } catch (NumberFormatException e){
-            System.out.println("Неправильный формат ввода");
-        } finally {
-            showAnswer();
+            exit();
         }
         flag = true;
         setVisible(false);
+    }
+
+    private void exit(){
+        System.out.println("Неправильный формат ввода");
+        System.exit(1);
     }
 
     void showAnswer(){
