@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Scanner;
 
 public class Algorithm
 {
@@ -18,37 +17,30 @@ public class Algorithm
 
     private Visualization visual;
 
-    Algorithm(Visualization visual)
-    {
-        this.visual = visual;
-    }
-
     public void start()
     {
         getInput();
+        init();
         updateViz();
         DFS(0, -1, n - 1, 0);
         showAnswer();
     }
 
-    private void getInput(){
-        System.out.println("Введите количество городов: ");
-        Scanner cin = new Scanner(System.in);
-        n = cin.nextInt();
-        System.out.println("Введите матрицу смежности: ");
-        for(int i = 0; i < n; i++) {
-            g.add(new ArrayList<> ());
+    private void init(){ //инициализируем path и visited
+        for(int i = 0; i < n; i++){
             path.add(-1);
             visited.add(false);
-            for (int j = 0; j < n; j++) {
-                int k = cin.nextInt();
-                g.get(i).add(k);
-            }
         }
+    }
+
+    private void getInput(){
+        n = Input.getN();
+        g = Input.getG();
     }
 
     private void updateViz()
     {
+        visual = new Visualization();
         ArrayList<Point> points = getCoordinates();
         for(int i = 0; i < n; i++){
             visual.addVertex(i, (int)(points.get(i).x * 250) + 250, (int)(points.get(i).y * 250) + 250);
@@ -89,7 +81,7 @@ public class Algorithm
             weight += g.get(v).get(start);
             if(weight < min_weight){
                 min_weight = weight;
-                optimal_path = (ArrayList<Integer>) path.clone();
+                optimal_path = (ArrayList<Integer>) path.clone(); //Сохраняем найденный путь
                 finish = v;
                 visual.changeSumOfWeights(weight, min_weight);
             }

@@ -1,8 +1,11 @@
 public class Main {
 
     public static void main(String[] args){
-        Visualization v = new Visualization();
-        Algorithm algorithm = new Algorithm(v);
+        Input input = new Input();
+        while(!input.getFlag()){
+            Thread.yield(); //говорит потоку выполняться дальше
+        }
+        Algorithm algorithm = new Algorithm();
         algorithm.start();
     }
 

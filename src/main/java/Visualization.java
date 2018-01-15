@@ -4,6 +4,8 @@ import com.mxgraph.view.mxGraph;
 import com.mxgraph.view.mxStylesheet;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +44,12 @@ public class Visualization extends JFrame
         slider.setPaintTicks(true);
         slider.setValue(5);
 
-        slider.addChangeListener(e -> Algorithm.speed = slider.getValue()*100);
+        slider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent changeEvent) {
+                Algorithm.speed = slider.getValue()*100;
+            }
+        });
         getContentPane().add(slider, BorderLayout.NORTH);
 
         graph = new mxGraph();
