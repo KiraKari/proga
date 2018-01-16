@@ -11,8 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Visualization extends JFrame
-{
+public class Visualization extends JFrame{
     private mxGraph graph;
     private Object parent;
     private mxGraphComponent graphComponent;
@@ -26,8 +25,7 @@ public class Visualization extends JFrame
     private ArrayList<Object> vertex = new ArrayList<> ();
     private ArrayList<ArrayList<Object>> edge = new ArrayList<> ();
 
-    Visualization()
-    {
+    Visualization(){
         setLayout(new BorderLayout());
 
         textArea = new JTextArea(20, 20); //размер панельки справа
@@ -44,7 +42,7 @@ public class Visualization extends JFrame
         slider.setPaintTicks(true);
         slider.setValue(5);
 
-        slider.addChangeListener(new ChangeListener() {
+        slider.addChangeListener(new ChangeListener() { //обрабатываем нажатие на ползунок
             @Override
             public void stateChanged(ChangeEvent changeEvent) {
                 Algorithm.speed = slider.getValue()*100;
@@ -63,36 +61,30 @@ public class Visualization extends JFrame
         initEdgeTurnOff();
         graph.setStylesheet(stylesheet);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(950, 650);
+        setSize(950, 650); // размер окна
         setVisible(true);
 
-        for(int i = 0; i < 20; i++)
-        {
+        for(int i = 0; i < 20; i++){ // инициализируем edge
             edge.add(new ArrayList<> ());
-            for(int j = 0; j < 20; j++)
-            {
+            for(int j = 0; j < 20; j++){
                 edge.get(i).add(null);
             }
         }
     }
 
-    public void log(String s)
-    {
+    public void log(String s){ //объявляем панельку справа
         textArea.append(s);
         textArea.setCaretPosition(textArea.getDocument().getLength()); //чтобы панелька справа спускалась вниз
     }
 
-    public void changeSumOfWeights(int current, int min)
-    {
-        sumWeightLabel.setText("Сумма весов: "+current+"; Минимальная сумма весов: "+min);
+    public void changeSumOfWeights(int weight, int min_weight){
+        sumWeightLabel.setText("Сумма весов: "+weight+"; Минимальная сумма весов: "+min_weight);
     }
 
-    public void addVertex(int number, int x, int y)
-    {
+    public void addVertex(int number, int x, int y){
         beginUpdate();
         try{
             vertex.add(graph.insertVertex(parent, null, Integer.toString(number), x, y, 50, 50));
-            System.out.println(number+" vertex has been added");
             log(number+" вершина была добавлена\n");
         }
         finally {
@@ -111,50 +103,39 @@ public class Visualization extends JFrame
         }
     }
 
-    public void turnOnVertex(int v)
-    {
-        System.out.println("Turn on "+v+" vertex");
+    public void turnOnVertex(int v){
         log("Пришли в "+v+" вершину\n");
         graph.setCellStyle("turnVertexOn", new Object[]{vertex.get(v)});
         graphComponent.refresh();
     }
 
-    public void turnOffVertex(int v)
-    {
-        System.out.println("Turn off "+v+" vertex");
+    public void turnOffVertex(int v){
         log("Вышли из "+v+" вершины\n");
         graph.setCellStyle("turnVertexOff", new Object[]{vertex.get(v)});
         graphComponent.refresh();
     }
 
-    public void turnOnEdge(int v1, int v2)
-    {
+    public void turnOnEdge(int v1, int v2){
         if(v1 == -1) return;
 
-        if(v1 > v2)
-        {
+        if(v1 > v2){
             int b = v1;
             v1 = v2;
             v2 = b;
         }
-
-        System.out.println("Turn on from "+v1+" to "+v2);
         graph.setCellStyle("turnEdgeOn", new Object[]{edge.get(v1).get(v2)});
         graphComponent.refresh();
     }
 
-    public void turnOffEdge(int v1, int v2)
-    {
+    public void turnOffEdge(int v1, int v2){
         if(v1 == -1) return;
 
-        if(v1 > v2)
-        {
+        if(v1 > v2){
             int b = v1;
             v1 = v2;
             v2 = b;
         }
 
-        System.out.println("Turn off from "+v1+" to "+v2);
         graph.setCellStyle("turnEdgeOff", new Object[]{edge.get(v1).get(v2)});
         graphComponent.refresh();
     }
@@ -170,8 +151,7 @@ public class Visualization extends JFrame
     }
 
     // ниже играюсь со шрифтами
-    private void initVertexTurnOn()
-    {
+    private void initVertexTurnOn(){
         Map<String, Object> vertexStyle = new HashMap<> ();
         vertexStyle.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
         vertexStyle.put(mxConstants.STYLE_PERIMETER, mxConstants.PERIMETER_ELLIPSE);
@@ -185,8 +165,7 @@ public class Visualization extends JFrame
         stylesheet.putCellStyle("turnVertexOn", vertexStyle);
     }
 
-    private void initVertexTurnOff()
-    {
+    private void initVertexTurnOff(){
         Map<String, Object> vertexStyle = new HashMap<> ();
         vertexStyle.put(mxConstants.STYLE_VERTICAL_ALIGN, mxConstants.ALIGN_MIDDLE);
         vertexStyle.put(mxConstants.STYLE_PERIMETER, mxConstants.PERIMETER_ELLIPSE);
@@ -201,8 +180,7 @@ public class Visualization extends JFrame
         stylesheet.setDefaultVertexStyle(vertexStyle);
     }
 
-    private void initEdgeTurnOn()
-    {
+    private void initEdgeTurnOn(){
         Map<String, Object> edgeStyle = new HashMap<> ();
         edgeStyle.put(mxConstants.STYLE_MOVABLE, 0);
         edgeStyle.put(mxConstants.STYLE_RESIZABLE, 0);
@@ -215,8 +193,7 @@ public class Visualization extends JFrame
         stylesheet.putCellStyle("turnEdgeOn", edgeStyle);
     }
 
-    private void initEdgeTurnOff()
-    {
+    private void initEdgeTurnOff(){
         Map<String, Object> edgeStyle = new HashMap<> ();
         edgeStyle.put(mxConstants.STYLE_MOVABLE, 0);
         edgeStyle.put(mxConstants.STYLE_RESIZABLE, 0);

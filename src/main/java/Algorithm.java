@@ -45,14 +45,14 @@ public class Algorithm {
         }
 
         for(int i = 0; i < n; i++){
-            for(int j = i; j < n; j++){
+            for(int j = i; j < n; j++){ //Идем по правой от главной диагонали части матрицы
                 if(i == j) continue;
                 visual.addEdge(i, j);
             }
         }
     }
 
-    private void DFS(int v, int from, int steps, int weight){
+    private void DFS(int v, int from, int steps, int weight){ //реализуем перебор
         if (visited.get(v)) return;
 
         turnOn(from, v);
@@ -65,7 +65,7 @@ public class Algorithm {
 
         visited.set(v, true);
         path.set(v, from);
-        if (steps == 0 && g.get(v).get(start)!= -1){
+        if(steps == 0 && g.get(v).get(start)!= -1){
             weight += g.get(v).get(start);
             if(weight < min_weight){
                 min_weight = weight;
@@ -75,12 +75,8 @@ public class Algorithm {
             }
         }
 
-        for(int i = 0; i < n; i++)
-        {
-            if(g.get(v).get(i) == -1)
-            {
-                continue;
-            }
+        for(int i = 0; i < n; i++){ // Идем по соседям
+            if(g.get(v).get(i) == -1) continue; // и проверяем есть ли там путь
             DFS(i, v, steps - 1, weight + g.get(v).get(i));
         }
         visited.set(v, false);
@@ -90,27 +86,27 @@ public class Algorithm {
 
     private void showAnswer(){
         ArrayList<Integer> a = get_path();
-        for(int i : a){
+        for(int i = 0; i < a.size() - 1; i++){
             visual.log(i+" - ");
             System.out.print(i+" ");
         }
-        visual.log(start+"\nМинимальный вес "+min_weight+"\n");
-        System.out.println("\n"+min_weight);
+        visual.log(finish+"\nМинимальный вес "+min_weight+"\n");
+        System.out.println(finish+"\n"+min_weight);
     }
 
-    private void turnOn(int from, int v){
+    private void turnOn(int from, int v){ //включаем вершинку и ребро
         visual.turnOnVertex(v);
         visual.turnOnEdge(from, v);
         waitSecond();
     }
 
-    private void turnOff(int from, int v){
+    private void turnOff(int from, int v){ // выключаем вершинку и ребро
         visual.turnOffVertex(v);
         visual.turnOffEdge(from, v);
         waitSecond();
     }
 
-    private void waitSecond(){
+    private void waitSecond(){ // задержка
         try {
             Thread.sleep(speed);
         } catch (InterruptedException e) {
@@ -123,10 +119,8 @@ public class Algorithm {
     {
         ArrayList<Integer> ans = new ArrayList<> ();
 
-        System.out.println(start+" "+finish);
         int prev = -1;
-        for (int v = finish; v != start; v = optimal_path.get(v))
-        {
+        for (int v = finish; v != start; v = optimal_path.get(v)){
             turnOn(prev, v);
 
             ans.add(v);
@@ -134,8 +128,8 @@ public class Algorithm {
         }
 
         ans.add(start);
-        Collections.reverse(ans);
-        visual.turnOnEdge(ans.get(0), ans.get(1));
+        Collections.reverse(ans); //переворачиваем для полуения пути
+        visual.turnOnEdge(ans.get(0), ans.get(1)); //и подсвеиваем его
         for(int i = 0; i < n; i++){
             if(i != 0 && i != n - 1){
                 visual.turnOnEdge(ans.get(i - 1), ans.get(i));
@@ -146,7 +140,7 @@ public class Algorithm {
         return ans;
     }
 
-    private ArrayList<Point> getCoordinates(){
+    private ArrayList<Point> getCoordinates(){ //рассчитываем расположение вершин графа
         ArrayList<Point> coord = new ArrayList<> ();
         double step = (2*Math.PI)/n;
         for(double i = 0; i < 2*Math.PI; i += step){
