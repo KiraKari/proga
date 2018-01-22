@@ -2,8 +2,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Algorithm {
-    public static int speed = 500;
-
     private ArrayList<ArrayList<Integer>> g = new ArrayList<> ();
     private ArrayList<Boolean> visited = new ArrayList<> ();
     private ArrayList<Integer> path = new ArrayList<> ();
@@ -55,11 +53,11 @@ public class Algorithm {
     private void DFS(int v, int from, int steps, int weight){ //реализуем перебор
         if (visited.get(v)) return;
 
-        turnOn(from, v);
+        visual.turnOn(from, v);
         visual.changeSumOfWeights(weight, min_weight);
 
         if(weight > min_weight){
-            turnOff(from, v);
+            visual.turnOff(from, v);
             return;
         }
 
@@ -81,39 +79,16 @@ public class Algorithm {
         }
         visited.set(v, false);
 
-        turnOff(from, v);
+        visual.turnOff(from, v);
     }
 
     private void showAnswer(){
         ArrayList<Integer> a = get_path();
         for(int i = 0; i < a.size() - 1; i++){
             visual.log(i+" - ");
-            System.out.print(i+" ");
         }
         visual.log(finish+"\nМинимальный вес "+min_weight+"\n");
-        System.out.println(finish+"\n"+min_weight);
     }
-
-    private void turnOn(int from, int v){ //включаем вершинку и ребро
-        visual.turnOnVertex(v);
-        visual.turnOnEdge(from, v);
-        waitSecond();
-    }
-
-    private void turnOff(int from, int v){ // выключаем вершинку и ребро
-        visual.turnOffVertex(v);
-        visual.turnOffEdge(from, v);
-        waitSecond();
-    }
-
-    private void waitSecond(){ // задержка
-        try {
-            Thread.sleep(speed);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     private ArrayList<Integer> get_path()
     {
@@ -121,7 +96,7 @@ public class Algorithm {
 
         int prev = -1;
         for (int v = finish; v != start; v = optimal_path.get(v)){
-            turnOn(prev, v);
+            visual.turnOn(prev, v);
 
             ans.add(v);
             prev = v;

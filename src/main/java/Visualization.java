@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Visualization extends JFrame{
+    public static int speed = 500;
+
     private mxGraph graph;
     private Object parent;
     private mxGraphComponent graphComponent;
@@ -45,7 +47,7 @@ public class Visualization extends JFrame{
         slider.addChangeListener(new ChangeListener() { //обрабатываем нажатие на ползунок
             @Override
             public void stateChanged(ChangeEvent changeEvent) {
-                Algorithm.speed = slider.getValue()*100;
+                speed = slider.getValue()*100;
             }
         });
         getContentPane().add(slider, BorderLayout.NORTH);
@@ -69,6 +71,26 @@ public class Visualization extends JFrame{
             for(int j = 0; j < 20; j++){
                 edge.get(i).add(null);
             }
+        }
+    }
+
+    public void turnOn(int from, int v){ //включаем вершинку и ребро
+        turnOnVertex(v);
+        turnOnEdge(from, v);
+        waitSecond();
+    }
+
+    public void turnOff(int from, int v){ // выключаем вершинку и ребро
+        turnOffVertex(v);
+        turnOffEdge(from, v);
+        waitSecond();
+    }
+
+    private void waitSecond(){ // задержка
+        try {
+            Thread.sleep(speed);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

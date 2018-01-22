@@ -78,7 +78,7 @@ public class Input extends JFrame{
                     }
                 }
             }
-            showAnswer(); //DEBUG
+            //showAnswer(); //DEBUG
         } catch (NumberFormatException e){
             exit();
         }
